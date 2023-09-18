@@ -1,97 +1,122 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { Dialog } from "@headlessui/react"
+import { Disclosure } from "@headlessui/react"
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 
-const navigation = [
-  { name: "Scores", to: "/" },
-  { name: "News", to: "/" },
-  { name: "About", to: "/" },
-  { name: "Contact", to: "/" },
-]
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ")
+}
 
 export const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [navigation, setNavigation] = useState([])
 
+  useEffect(() => {
+    setNavigation([
+      { name: "Futsal", to: "/futsal", current: false },
+      { name: "Football", to: "/football", current: false },
+      { name: "Cricket", to: "/cricket", current: false },
+      { name: "Basketball", to: "/basketball", current: false },
+    ])
+  }, [])
   return (
-    <header className="bg-gray-900">
-      <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
-        aria-label="Global">
-        <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <p className="text-2xl leading-6 text-gray-300">NepScore</p>
-          </Link>
-        </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400"
-            onClick={() => setMobileMenuOpen(true)}>
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
-        <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-sm font-semibold leading-6 text-white">
-              {item.name}
-            </a>
-          ))}
-        </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          {/* <Link to="/" className="text-sm font-semibold leading-6 text-white">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link> */}
-        </div>
-      </nav>
-      <Dialog
-        as="div"
-        className="lg:hidden"
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}>
-        <div className="fixed inset-0 z-10" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <p className="text-2xl leading-6 text-gray-300">NepScore</p>
-            </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5 text-gray-400"
-              onClick={() => setMobileMenuOpen(false)}>
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/25">
-              <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800">
-                    {item.name}
-                  </a>
-                ))}
+    <Disclosure as="header" className="bg-gray-800">
+      {({ open }) => (
+        <>
+          <div className="mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8">
+            <div className="relative flex h-16 justify-between">
+              <div className="relative z-10 flex px-2 lg:px-0">
+                <div className="flex flex-shrink-0 items-center">
+                  <p className="text-2xl leading-6 text-gray-300">NepScore</p>
+                </div>
               </div>
-              <div className="py-6">
-                {/* <Link
-                  to="/"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800">
-                  Log in
-                </Link> */}
+              <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+                <div className="w-full sm:max-w-xs">
+                  <label htmlFor="search" className="sr-only">
+                    Search
+                  </label>
+                  <div className="relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                      <MagnifyingGlassIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <input
+                      id="search"
+                      name="search"
+                      className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 focus:placeholder:text-gray-500 sm:text-sm sm:leading-6"
+                      placeholder="Search"
+                      type="search"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="relative z-10 flex items-center lg:hidden">
+                {/* Mobile menu button */}
+                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <span className="absolute -inset-0.5" />
+                  <span className="sr-only">Open menu</span>
+                  {open ? (
+                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                  )}
+                </Disclosure.Button>
               </div>
             </div>
+            <nav
+              className="hidden lg:flex lg:space-x-8 lg:py-2 justify-center"
+              aria-label="Global">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.to}
+                  className={classNames(
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium"
+                  )}
+                  aria-current={item.current ? "page" : undefined}
+                  onClick={() => {
+                    setNavigation((_prev) => {
+                      const tmp = [..._prev]
+                      for (let i = 0; i < tmp.length; i++) {
+                        tmp[i].name === item.name
+                          ? (tmp[i].current = true)
+                          : (tmp[i].current = false)
+                      }
+                      return tmp
+                    })
+                  }}>
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
           </div>
-        </Dialog.Panel>
-      </Dialog>
-    </header>
+
+          <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
+            <div className="space-y-1 px-2 pb-3 pt-2">
+              {navigation.map((item) => (
+                <Disclosure.Button
+                  key={item.name}
+                  as={Link}
+                  to={item.to}
+                  className={classNames(
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block rounded-md py-2 px-3 text-base font-medium"
+                  )}
+                  aria-current={item.current ? "page" : undefined}>
+                  {item.name}
+                </Disclosure.Button>
+              ))}
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   )
 }
