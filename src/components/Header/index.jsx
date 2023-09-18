@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Disclosure } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 
@@ -8,6 +8,7 @@ function classNames(...classes) {
 }
 
 export const Header = () => {
+  const navigate = useNavigate()
   const [navigation, setNavigation] = useState([])
   const [headers, setHeaders] = useState([])
 
@@ -33,7 +34,13 @@ export const Header = () => {
             <div className="relative flex h-16 justify-between">
               <div className="relative z-10 flex px-2 lg:px-0">
                 <div className="flex flex-shrink-0 items-center">
-                  <p className="text-2xl leading-6 text-gray-300">NepScore</p>
+                  <p
+                    className="text-2xl leading-6 text-gray-300 cursor-pointer"
+                    onClick={() => {
+                      navigate("/")
+                    }}>
+                    NepScore
+                  </p>
                 </div>
               </div>
               <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
