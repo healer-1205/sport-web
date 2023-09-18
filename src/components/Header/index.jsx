@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Disclosure } from "@headlessui/react"
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 
 function classNames(...classes) {
@@ -10,6 +9,7 @@ function classNames(...classes) {
 
 export const Header = () => {
   const [navigation, setNavigation] = useState([])
+  const [headers, setHeaders] = useState([])
 
   useEffect(() => {
     setNavigation([
@@ -18,9 +18,15 @@ export const Header = () => {
       { name: "Cricket", to: "/cricket", current: false },
       { name: "Basketball", to: "/basketball", current: false },
     ])
+    setHeaders([
+      { name: "Scores", to: "/scores", current: false },
+      { name: "News", to: "/news", current: false },
+      { name: "About", to: "/about", current: false },
+      { name: "Contact", to: "/contact", current: false },
+    ])
   }, [])
   return (
-    <Disclosure as="header" className="bg-gray-800">
+    <Disclosure as="header" className="bg-gray-900">
       {({ open }) => (
         <>
           <div className="mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8">
@@ -31,25 +37,32 @@ export const Header = () => {
                 </div>
               </div>
               <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
-                <div className="w-full sm:max-w-xs">
-                  <label htmlFor="search" className="sr-only">
-                    Search
-                  </label>
-                  <div className="relative">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <MagnifyingGlassIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <input
-                      id="search"
-                      name="search"
-                      className="block w-full rounded-md border-0 bg-gray-700 py-1.5 pl-10 pr-3 text-gray-300 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 focus:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                      placeholder="Search"
-                      type="search"
-                    />
-                  </div>
+                <div className="w-full sm:max-w-xs lg:flex lg:justify-center hidden">
+                  {headers.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                      onClick={() => {
+                        setHeaders((_prev) => {
+                          const tmp = [..._prev]
+                          for (let i = 0; i < tmp.length; i++) {
+                            tmp[i].name === item.name
+                              ? (tmp[i].current = true)
+                              : (tmp[i].current = false)
+                          }
+                          return tmp
+                        })
+                      }}>
+                      {item.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <div className="relative z-10 flex items-center lg:hidden">
@@ -98,6 +111,21 @@ export const Header = () => {
 
           <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
             <div className="space-y-1 px-2 pb-3 pt-2">
+              {headers.map((item) => (
+                <Disclosure.Button
+                  key={item.name}
+                  as={Link}
+                  to={item.to}
+                  className={classNames(
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block rounded-md py-2 px-3 text-base font-medium"
+                  )}
+                  aria-current={item.current ? "page" : undefined}>
+                  {item.name}
+                </Disclosure.Button>
+              ))}
               {navigation.map((item) => (
                 <Disclosure.Button
                   key={item.name}

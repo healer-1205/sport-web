@@ -4,6 +4,8 @@ import { Layout } from "./components/Layout"
 import { Home } from "./pages/Home"
 import { Futsal } from "./pages/Futsal"
 import { Football } from "./pages/Football"
+import { Match } from "./pages/Match"
+import { Team } from "./pages/Team"
 
 function App() {
   return (
@@ -30,6 +32,22 @@ function App() {
           element={
             <Layout>
               <Football />
+            </Layout>
+          }
+        />
+        <Route
+          path="/matches"
+          element={
+            <Layout>
+              <Match />
+            </Layout>
+          }
+        />
+        <Route
+          path="/teams"
+          element={
+            <Layout>
+              <Team />
             </Layout>
           }
         />
